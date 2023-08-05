@@ -1,0 +1,25 @@
+service: call-fuel-ts
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: stage
+  timeout: 30
+  region: 'ap-south-1'
+
+plugins:
+    - serverless-plugin-typescript
+
+package: 
+  exclude:
+      #- 'node_modules/**'
+      - 'pre_tests/**'
+
+functions:
+  wallet:
+    handler: handler.wallet
+    events:
+      - http: 
+          path: call_fuel
+          method: POST

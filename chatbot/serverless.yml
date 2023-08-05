@@ -1,0 +1,138 @@
+org: carst
+app: call-fuel-ts
+
+service: nila-chatbot
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: stage
+  timeout: 30
+  region: 'ap-south-1'
+  iam:
+      role:
+        statements:
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+              - s3:PutObject
+              - s3:*
+              - lambda:InvokeAsync
+              - lambda:InvokeFunction
+            Resource: 
+              - 'arn:aws:dynamodb:ap-south-1:867185477215:table/Member-q7dz4tkcefhkdhn4snv65cvkru-stage'
+              - 'arn:aws:dynamodb:ap-south-1:867185477215:table/Sponsors'
+              - 'arn:aws:dynamodb:ap-south-1:867185477215:table/Latlng-stage'
+              - 'arn:aws:dynamodb:ap-south-1:867185477215:table/responds_container-stage'
+              - 'arn:aws:dynamodb:ap-south-1:867185477215:table/AES-stage'
+              - 'arn:aws:lambda:ap-south-1:867185477215:function:Chitta-Sensing-stage-GEOMMAPPLOT'
+              - 'arn:aws:s3:::chatbot-stage-cropcerts-10xgf6ebbroee'
+              - 'arn:aws:s3:::chatbot-stage-cropcerts-10xgf6ebbroee/*'
+              - 'arn:aws:lambda:ap-south-1:867185477215:function:chitta-chatbot-stage-LabelResponse'
+              - 'arn:aws:lambda:ap-south-1:867185477215:function:chitta-chatbot-stage-PropertyAssetResponse'
+              - 'arn:aws:lambda:ap-south-1:867185477215:function:call-fuel-ts-stage-wallet'
+
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+  #- serverless-rust
+
+package: 
+  exclude:
+      - 'venv/**'
+      - '_pycache_'
+      - package-lock.json
+      - flow.json
+      - 'node_modules/**'
+      - 'call-fuel-rs/**'
+      - 'call-fuel-ts/**'
+
+custom:
+  prune:
+    automatic: true
+    number: 5
+  pythonRequirements:
+    dockerizePip: non-linux
+    noDeploy:
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - pip
+      - python-dateutil
+      - s3transfer
+      - setuptools
+      - six
+
+functions:
+  # chatbot
+  Webhook:
+    handler: nav.Webhook 
+    events:
+      - http: 
+          path: webhook
+          method: POST
+  InMessageGetParams:
+    handler: nav.InMessageGetParams 
+    events:
+      - http: 
+          path: conversation
+          method: POST
+  GenerateAccount:
+    handler: nav.GenerateAccount 
+    events:
+      - http: 
+          path: gen_account
+          method: POST
+  # register
+  PropertyAssetCreate:
+    handler: assets.PropertyAssetCreate 
+    events:
+      - http: 
+          path: asset_create
+          method: POST
+  PropertyAssetView:
+    handler: assets.PropertyAssetView 
+    events:
+      - http: 
+          path: asset_view
+          method: POST
+  PropertyAssetEdit:
+    handler: assets.PropertyAssetEdit 
+    events:
+      - http: 
+          path: asset_edit
+          method: POST
+  # credit flow
+  InitialCreditRequest:
+    handler: liabilities.InitialCreditRequest 
+    events:
+      - http: 
+          path: credit_init
+          method: POST
+  CreditRequirements:
+    handler: liabilities.CreditRequirements
+    events:
+      - http: 
+          path: credit_req
+          method: POST
+  # RUST 
+  Contract_intent:
+    handler: liabilities.Contract_intent
+    events:
+      - http: 
+          path: credit_intent
+          method: POST
+  Contract_guarantee:
+    handler: liabilities.Contract_guarantee
+    events:
+      - http: 
+          path: credit_guarantee
+          method: POST
