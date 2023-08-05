@@ -15,11 +15,11 @@ export async function wallet(e, context, callback) {
   // let e = {
   //   type: 100,
   //   duration: 3,
-  //   SK: '0x03c1b740fdddbe67edae30443b969da79aa8c0d055486fe185b82f34a719c2ca',
+  //   SK: '**',
   //   sponsors: '[{"business_name": "Arani Food Export", "pk": "fuel172tmgjslwr6cpteru7fw2qe0wprwfrz9mztcrfhefv6q8h69dtdsurwm6v", "name": "mr. Krishnan H", "phonenumber": "+31627257049"}, {"business_name": "Magarantham Ltd FPO", "pk": "fuel172tmgjslwr6cpteru7fw2qe0wprwfrz9mztcrfhefv6q8h69dtdsurwm6v", "name": "mr. Anandan Pandurangan", "phonenumber": "+316272570490"}]',
   //   amount: 0,
   //   rate: 0,
-  //   phone: 'whatsapp:+31627257049'
+  //   phone: 'whatsapp:+**'
   // }
 
   console.log('event', e);
