@@ -24,7 +24,7 @@ export async function wallet(e, context, callback) {
 
   console.log('event', e);
   // connect to the network
-  const provider = new Provider('https://beta-3.fuel.network/graphql');
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
   // receive the Private Key from the connected lambda (UNSAFE)
   const wallet = Wallet.fromPrivateKey(e['SK'], provider);
   // sponsor will simply sign the predicate, which then fulfulls transaction.
